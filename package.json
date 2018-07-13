@@ -15,8 +15,10 @@
   "scripts": {
     "build": "tsc",
     "test": "npm run lint && npm run jest",
+    "test:cov": "npm run lint && npm run jest:cov",
     "lint": "tslint -p .",
     "jest": "jest --detectOpenHandles --forceExit",
+    "jest:cov": "jest --coverage --detectOpenHandles --forceExit",
     "publish": "npm run build"
   },
   "author": "zcong1993 <1005997919@qq.com>",

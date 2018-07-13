@@ -19,10 +19,10 @@ const em = new ExpireMap(5000)
 
 em.setExpire('haha', 'hehe', 2000)
 
-console.log(em.get('haha))
+console.log(em.get('haha'))
 // 'hehe'
-// fater 2000 ms
-console.log(em.get('haha))
+// after 2000 ms
+console.log(em.get('haha'))
 // undefined
 ```
 
