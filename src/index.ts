@@ -54,9 +54,8 @@ export default class ExpireMap {
 
   public getAll = (): Map<any, any> => {
     const m = new Map()
-    this.checkAll()
     for (const [k, v] of this.store) {
-      m.set(k, v.value)
+      this.get(k) && m.set(k, v.value)
     }
     return m
   }
