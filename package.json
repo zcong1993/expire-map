@@ -1,0 +1,48 @@
+{
+  "name": "expire-map",
+  "version": "0.1.0",
+  "description": "map that support expire",
+  "repository": {
+    "url": "zcong1993/expire-map",
+    "type": "git"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist/index.js",
+    "dist/index.d.ts"
+  ],
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run lint && npm run jest",
+    "lint": "tslint -p .",
+    "jest": "jest --detectOpenHandles --forceExit",
+    "publish": ""
+  },
+  "author": "zcong1993 <1005997919@qq.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^23.1.5",
+    "jest": "^23.4.0",
+    "np": "^3.0.4",
+    "ts-jest": "^23.0.0",
+    "tslint": "^5.8.0",
+    "tslint-config-airbnb": "^5.4.2",
+    "typescript": "^2.6.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  }
+}

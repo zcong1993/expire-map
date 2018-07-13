@@ -1,0 +1,53 @@
+import ExpireMap from '../src'
+
+const delay = (t: number):Promise<void> => new Promise(resolve => setTimeout(resolve, t))
+
+test('normal expire map should work well', async () => {
+  const em = new ExpireMap(5000)
+  const mp = new Map()
+
+  const key = 'test_key'
+  const value = 'test_value'
+  const expire = 1000
+
+  em.setExpire(key, value, expire)
+  mp.set(key, value)
+
+  expect(em.get(key)).toBe(value)
+  expect(em.has(key)).toBeTruthy()
+  expect(em.size).toBe(1)
+  expect(em.getAll()).toEqual(mp)
+
+  await delay(expire)
+
+  expect(em.get(key)).toBe(undefined)
+  expect(em.getAll().size).toBe(0)
+  expect(em.has(key)).toBeFalsy()
+  expect(em.size).toBe(0)
+})
+
+test('normal expiredIn map should work well', async () => {
+  const em = new ExpireMap(5000)
+  const mp = new Map()
+
+  const key = 'test_key'
+  const value = 'test_value'
+  const expire = 1000
+
+  const expireIn = Date.now() + expire
+
+  em.setExpiredIn(key, value, expireIn)
+  mp.set(key, value)
+
+  expect(em.get(key)).toBe(value)
+  expect(em.has(key)).toBeTruthy()
+  expect(em.size).toBe(1)
+  expect(em.getAll()).toEqual(mp)
+
+  await delay(expire)
+
+  expect(em.get(key)).toBe(undefined)
+  expect(em.getAll().size).toBe(0)
+  expect(em.has(key)).toBeFalsy()
+  expect(em.size).toBe(0)
+})
