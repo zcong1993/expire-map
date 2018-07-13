@@ -1,5 +1,5 @@
 {
-  "name": "expire-map",
+  "name": "@zcong/expire-map",
   "version": "0.1.0",
   "description": "map that support expire",
   "repository": {
@@ -17,7 +17,7 @@
     "test": "npm run lint && npm run jest",
     "lint": "tslint -p .",
     "jest": "jest --detectOpenHandles --forceExit",
-    "publish": ""
+    "publish": "npm run build && np --no-cleanup --no-yarn"
   },
   "author": "zcong1993 <1005997919@qq.com>",
   "license": "MIT",

@@ -1,22 +1,29 @@
 
 # expire-map
 
-[![NPM version](https://img.shields.io/npm/v/expire-map.svg?style=flat)](https://npmjs.com/package/expire-map) [![NPM downloads](https://img.shields.io/npm/dm/expire-map.svg?style=flat)](https://npmjs.com/package/expire-map) [![CircleCI](https://circleci.com/gh/zcong1993/expire-map/tree/master.svg?style=shield)](https://circleci.com/gh/zcong1993/expire-map/tree/master)  [![codecov](https://codecov.io/gh/zcong1993/expire-map/branch/master/graph/badge.svg)](https://codecov.io/gh/zcong1993/expire-map)
+[![NPM version](https://img.shields.io/npm/v/@zcong/expire-map.svg?style=flat)](https://npmjs.com/package/@zcong/expire-map) [![NPM downloads](https://img.shields.io/npm/dm/@zcong/expire-map.svg?style=flat)](https://npmjs.com/package/@zcong/expire-map) [![CircleCI](https://circleci.com/gh/zcong1993/expire-map/tree/master.svg?style=shield)](https://circleci.com/gh/zcong1993/expire-map/tree/master)  [![codecov](https://codecov.io/gh/zcong1993/expire-map/branch/master/graph/badge.svg)](https://codecov.io/gh/zcong1993/expire-map)
  [![donate](https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&style=flat)](https://github.com/zcong1993/donate)
 
 ## Install
 
 ```bash
-yarn add expire-map
+$ yarn add @zcong/expire-map
 ```
 
 ## Usage
 
 ```js
-const expireMap = require('expire-map')
+const ExpireMap = require('@zcong/expire-map').default
 
-expireMap()
-//=> foo
+const em = new ExpireMap(5000)
+
+em.setExpire('haha', 'hehe', 2000)
+
+console.log(em.get('haha))
+// 'hehe'
+// fater 2000 ms
+console.log(em.get('haha))
+// undefined
 ```
 
 ## Contributing
