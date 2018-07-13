@@ -44,12 +44,12 @@ export default class ExpireMap {
   }
 
   public setExpire = (k: any, v: any, expire: number) => {
-    const expiredIn: number = Date.now() + expire
+    const expiredIn: number = Date.now() + Number(expire)
     this.setData(k, v, expiredIn)
   }
 
-  public setExpiredIn = (k: any, v: any, expiredIn: number) => {
-    this.setData(k, v, expiredIn)
+  public setExpiredIn = (k: any, v: any, expiredIn: Date) => {
+    this.setData(k, v, new Date(expiredIn).getTime())
   }
 
   public getAll = (): Map<any, any> => {
