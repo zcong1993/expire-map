@@ -65,6 +65,16 @@ export default class ExpireMap {
     return this.store.has(k)
   }
 
+  public update = (k: any, v: any): boolean => {
+    if (!this.has(k)) {
+      return false
+    }
+    const vv: ExpireValue = this.store.get(k)
+    vv.value = v
+    this.store.set(k, vv)
+    return true
+  }
+
   get size(): number {
     this.checkAll()
     return this.store.size
