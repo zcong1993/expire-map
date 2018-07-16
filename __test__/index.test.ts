@@ -15,6 +15,7 @@ test('normal expire map should work well', async () => {
 
   expect(em.get(key)).toBe(value)
   expect(em.has(key)).toBeTruthy()
+  expect(em.get('invalid key')).toBeUndefined()
   expect(em.size).toBe(1)
   expect(em.getAll()).toEqual(mp)
 
@@ -65,4 +66,5 @@ test('update should work well', () => {
   expect(em.get(key)).toBe(value)
   em.update(key, value2)
   expect(em.get(key)).toBe(value2)
+  expect(em.update('invald key', 'value')).toBeFalsy()
 })
