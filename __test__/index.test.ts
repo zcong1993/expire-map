@@ -34,7 +34,7 @@ test('normal expiredIn map should work well', async () => {
   const value = 'test_value'
   const expire = 1000
 
-  const expireIn = Date.now() + expire
+  const expireIn = new Date(Date.now() + expire)
 
   em.setExpiredIn(key, value, expireIn)
   mp.set(key, value)
@@ -50,4 +50,19 @@ test('normal expiredIn map should work well', async () => {
   expect(em.getAll().size).toBe(0)
   expect(em.has(key)).toBeFalsy()
   expect(em.size).toBe(0)
+})
+
+test('update should work well', () => {
+  const em = new ExpireMap(5000)
+  const mp = new Map()
+
+  const key = 'test_key'
+  const value = 'test_value'
+  const value2 = 'test_value_2'
+  const expire = 1000
+
+  em.setExpire(key, value, expire)
+  expect(em.get(key)).toBe(value)
+  em.update(key, value2)
+  expect(em.get(key)).toBe(value2)
 })
