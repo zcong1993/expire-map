@@ -68,3 +68,35 @@ test('update should work well', () => {
   expect(em.get(key)).toBe(value2)
   expect(em.update('invald key', 'value')).toBeFalsy()
 })
+
+test('clear should work well', () => {
+  const em = new ExpireMap(5000)
+  const mp = new Map()
+
+  const key = 'test_key'
+  const value = 'test_value'
+  const key2 = 'test_key_2'
+  const value2 = 'test_value_2'
+  const expire = 1000
+
+  em.setExpire(key, value, expire)
+  em.setExpire(key2, value2, expire)
+  expect(em.get(key)).toBe(value)
+  expect(em.get(key2)).toBe(value2)
+  em.clear()
+  expect(em.size).toBe(0)
+})
+
+test('delete should work well', () => {
+  const em = new ExpireMap(5000)
+  const mp = new Map()
+
+  const key = 'test_key'
+  const value = 'test_value'
+  const expire = 1000
+
+  em.setExpire(key, value, expire)
+  expect(em.get(key)).toBe(value)
+  expect(em.delete(key)).toBeTruthy()
+  expect(em.has(key)).toBeFalsy()
+})

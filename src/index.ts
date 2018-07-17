@@ -75,6 +75,14 @@ export default class ExpireMap {
     return true
   }
 
+  public clear = () => {
+    this.store.clear()
+  }
+
+  public delete = (k: any): boolean => {
+    return this.store.delete(k)
+  }
+
   get size(): number {
     this.checkAll()
     return this.store.size
