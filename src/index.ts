@@ -1,25 +1,25 @@
-export type ExpireValue = {
+export type ExpireValue<T> = {
   expiredIn: number,
-  value: any
+  value: T
 }
 
-export default class ExpireMap {
-  private store: Map<any, ExpireValue>
+export default class ExpireMap<K, V> {
+  private store: Map<K, ExpireValue<V>>
 
   constructor(gcInterval: number) {
     this.store = new Map()
     setInterval(this.checkAll.bind(this), gcInterval || 5000)
   }
 
-  private setData = (k: any, v: any, expiredIn: number) => {
-    const vv: ExpireValue = {
+  private setData = (k: K, v: V, expiredIn: number) => {
+    const vv: ExpireValue<V> = {
       expiredIn,
       value: v
     }
     this.store.set(k, vv)
   }
 
-  private check = (k: any) => {
+  private check = (k: K) => {
     const v = this.store.get(k)
     if (!v) {
       return
@@ -35,7 +35,7 @@ export default class ExpireMap {
     }
   }
 
-  public get = (k: any): any => {
+  public get = (k: K): V => {
     if (!this.store.has(k)) {
       return undefined
     }
@@ -43,16 +43,16 @@ export default class ExpireMap {
     return this.store.get(k) && this.store.get(k).value
   }
 
-  public setExpire = (k: any, v: any, expire: number) => {
+  public setExpire = (k: K, v: V, expire: number) => {
     const expiredIn: number = Date.now() + Number(expire)
     this.setData(k, v, expiredIn)
   }
 
-  public setExpiredIn = (k: any, v: any, expiredIn: Date) => {
+  public setExpiredIn = (k: K, v: V, expiredIn: Date) => {
     this.setData(k, v, new Date(expiredIn).getTime())
   }
 
-  public getAll = (): Map<any, any> => {
+  public getAll = (): Map<K, V> => {
     const m = new Map()
     for (const [k, v] of this.store) {
       this.get(k) && m.set(k, v.value)
@@ -60,16 +60,16 @@ export default class ExpireMap {
     return m
   }
 
-  public has = (k: any): boolean => {
+  public has = (k: K): boolean => {
     this.check(k)
     return this.store.has(k)
   }
 
-  public update = (k: any, v: any): boolean => {
+  public update = (k: K, v: V): boolean => {
     if (!this.has(k)) {
       return false
     }
-    const vv: ExpireValue = this.store.get(k)
+    const vv: ExpireValue<V> = this.store.get(k)
     vv.value = v
     this.store.set(k, vv)
     return true
@@ -79,7 +79,7 @@ export default class ExpireMap {
     this.store.clear()
   }
 
-  public delete = (k: any): boolean => {
+  public delete = (k: K): boolean => {
     return this.store.delete(k)
   }
 
