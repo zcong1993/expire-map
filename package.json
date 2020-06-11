@@ -11,7 +11,7 @@
     "dist/index.js",
     "dist/index.d.ts"
   ],
-  "typings": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "npm run lint && npm run jest",
