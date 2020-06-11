@@ -24,12 +24,12 @@
   "author": "zcong1993 <1005997919@qq.com>",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^23.1.5",
-    "jest": "^23.4.0",
-    "ts-jest": "^23.0.0",
-    "tslint": "^5.8.0",
-    "tslint-config-airbnb": "^5.4.2",
-    "typescript": "^2.6.2"
+    "@types/jest": "^26.0.0",
+    "jest": "^26.0.1",
+    "ts-jest": "^26.1.0",
+    "tslint": "^6.1.2",
+    "tslint-config-airbnb": "^5.11.2",
+    "typescript": "^3.9.5"
   },
   "jest": {
     "testEnvironment": "node",

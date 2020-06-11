@@ -1,90 +1,88 @@
 export type ExpireValue<T> = {
-  expiredIn: number,
-  value: T
-}
+  expire: number; // ms
+  expiredNano: number;
+  value: T;
+};
+
+export type Hrtime = [number, number];
+
+export const hrtime2nano = (hrtime: Hrtime): number =>
+  hrtime[0] * 1e9 + hrtime[1];
+
+export const ms2nano = (t: number): number => t * 1e6;
 
 export default class ExpireMap<K, V> {
-  private store: Map<K, ExpireValue<V>>
+  private store: Map<K, ExpireValue<V>>;
 
   constructor(gcInterval: number) {
-    this.store = new Map()
-    setInterval(this.checkAll.bind(this), gcInterval || 5000)
-  }
-
-  private setData = (k: K, v: V, expiredIn: number) => {
-    const vv: ExpireValue<V> = {
-      expiredIn,
-      value: v
-    }
-    this.store.set(k, vv)
-  }
-
-  private check = (k: K) => {
-    const v = this.store.get(k)
-    if (!v) {
-      return
-    }
-    if (Date.now() >= v.expiredIn) {
-      this.store.delete(k)
+    this.store = new Map();
+    if (gcInterval > 0) {
+      setInterval(() => this.gc(), gcInterval).unref();
     }
   }
 
-  private checkAll = () => {
-    for (const [k, _] of this.store) {
-      this.check(k)
+  set(key: K, value: V, expire: number) {
+    const ev: ExpireValue<V> = {
+      value,
+      expire,
+      expiredNano: this.nowNano() + ms2nano(expire),
+    };
+
+    this.store.set(key, ev);
+  }
+
+  get(key: K) {
+    return this.getOrEvict(key);
+  }
+
+  has(key: K) {
+    return this.store.has(key) && this.isValid(this.store.get(key));
+  }
+
+  clear() {
+    this.store.clear();
+  }
+
+  delete(key: K) {
+    this.store.delete(key);
+  }
+
+  getAll() {
+    this.gc();
+    const mp = new Map<K, V>();
+    for (const [k, v] of this.store.entries()) {
+      mp.set(k, v.value);
+    }
+    return mp;
+  }
+
+  gc() {
+    for (const [k, _] of this.store.entries()) {
+      this.getOrEvict(k);
     }
   }
 
-  public get = (k: K): V => {
-    if (!this.store.has(k)) {
-      return undefined
+  get size() {
+    return this.store.size;
+  }
+
+  private isValid(ev: ExpireValue<V> | undefined) {
+    if (!ev) {
+      return false;
     }
-    this.check(k)
-    return this.store.get(k) && this.store.get(k).value
+    return ev.expiredNano > this.nowNano();
   }
 
-  public setExpire = (k: K, v: V, expire: number) => {
-    const expiredIn: number = Date.now() + Number(expire)
-    this.setData(k, v, expiredIn)
-  }
-
-  public setExpiredIn = (k: K, v: V, expiredIn: Date) => {
-    this.setData(k, v, new Date(expiredIn).getTime())
-  }
-
-  public getAll = (): Map<K, V> => {
-    const m = new Map()
-    for (const [k, v] of this.store) {
-      this.get(k) && m.set(k, v.value)
+  private getOrEvict(key: K) {
+    const ev = this.store.get(key);
+    if (this.isValid(ev)) {
+      return ev.value;
     }
-    return m
+    this.store.delete(key);
+    return undefined;
   }
 
-  public has = (k: K): boolean => {
-    this.check(k)
-    return this.store.has(k)
-  }
-
-  public update = (k: K, v: V): boolean => {
-    if (!this.has(k)) {
-      return false
-    }
-    const vv: ExpireValue<V> = this.store.get(k)
-    vv.value = v
-    this.store.set(k, vv)
-    return true
-  }
-
-  public clear = () => {
-    this.store.clear()
-  }
-
-  public delete = (k: K): boolean => {
-    return this.store.delete(k)
-  }
-
-  get size(): number {
-    this.checkAll()
-    return this.store.size
+  private nowNano() {
+    return hrtime2nano(process.hrtime());
   }
 }
